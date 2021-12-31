@@ -13,15 +13,49 @@
     <div class="wrapper">
         <h1 id="counter">0</h1>
         <div class="controls">
-            <button class="plus">+</button>
-            <button class="minus">-</button>
-            <button class="reset">Reset</button>
+            <button class="plus btn">+</button>
+            <button class="minus btn">-</button>
+            <button class="reset btn">Reset</button>
         </div>
     </div>
 
     <script src="./chota-redux.js"></script>
     <script>
+        function counter(state = 0, action) {
+            switch(action.type) {
+                case 'INCREMENT':
+                    return state ? state + 1 : 1;
 
+                case 'DECREMENT':
+                    return state ? state - 1 : 0;
+
+                case 'RESET':
+                    return 0;
+            }
+        }
+
+        const reducers = combineReducers({
+            counter: counter
+        })
+
+        const store = createStore(reducers);
+
+        document.querySelector('.plus').addEventListener('click', () => {
+            store.dispatch({ type: 'INCREMENT' })
+        });
+
+        document.querySelector('.minus').addEventListener('click', () => {
+            store.dispatch({ type: 'DECREMENT' })
+        });
+
+        document.querySelector('.reset').addEventListener('click', () => {
+            store.dispatch({ type: 'RESET' })
+        });
+
+        store.subscribe(() => {
+            const state = store.getState();
+            document.querySelector('#counter').innerHTML = state.counter;
+        })
     </script>
 </body>
 
